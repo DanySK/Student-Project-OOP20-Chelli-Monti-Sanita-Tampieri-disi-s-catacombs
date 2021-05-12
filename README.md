@@ -1,4 +1,4 @@
-# Procedural dungeon project
+# Procedural dungeon project (fork)
 
 [![Generate report](https://github.com/eutampieri/OOP20-procedural-dungeon/actions/workflows/report.yml/badge.svg)](https://github.com/eutampieri/OOP20-procedural-dungeon/actions/workflows/report.yml)
 [![tests](https://github.com/eutampieri/OOP20-procedural-dungeon/actions/workflows/test.yml/badge.svg)](https://github.com/eutampieri/OOP20-procedural-dungeon/actions/workflows/test.yml)
