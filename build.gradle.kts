@@ -1,3 +1,5 @@
+import de.aaschmid.gradle.plugins.cpd.Cpd
+
 plugins {
     // Apply the java plugin to add support for Java
     java
@@ -8,6 +10,8 @@ plugins {
     pmd
     id("com.github.spotbugs") version "4.7.0"
     checkstyle
+    id("de.aaschmid.cpd")
+    `build-dashboard`
 }
 
 repositories {
@@ -21,7 +25,7 @@ dependencies {
     //implementation("com.google.apis:google-api-services-books:v1-rev20201021-1.30.10")
     //implementation("com.omertron:API-OMDB:1.5")
     implementation("org.apache.commons:commons-lang3:3.12.0")
-    
+
     //runtimeOnly("org.slf4j:slf4j-log4j12:1.7.30")
 
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.2.2")
@@ -65,6 +69,7 @@ task("runMain", JavaExec::class) {
 tasks.withType<Test> {
     useJUnitPlatform()
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+    ignoreFailures = true
 }
 tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
@@ -117,3 +122,47 @@ tasks.spotbugsTest {
     }
 }
 
+
+spotbugs {
+    setEffort("max")
+    setReportLevel("low")
+    showProgress.set(true)
+    val excludeFile = File("${project.rootProject.projectDir}/config/spotbugs/excludes.xml")
+    if (excludeFile.exists()) {
+        excludeFilter.set(excludeFile)
+    }
+}
+
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask> {
+    ignoreFailures = true
+    reports {
+        create("html") {
+            enabled = true
+        }
+    }
+}
+
+pmd {
+    ruleSets = listOf()
+    ruleSetConfig = resources.text.fromFile("${project.rootProject.projectDir}/config/pmd/pmd.xml")
+    isIgnoreFailures = true
+}
+
+cpd {
+    isIgnoreFailures = true
+}
+
+tasks.withType<Cpd> {
+    reports {
+        xml.setEnabled(false)
+        text.setEnabled(true)
+    }
+    language = "java"
+    minimumTokenCount = 50
+    ignoreFailures = true
+    source = sourceSets["main"].allJava
+}
+
+checkstyle {
+    isIgnoreFailures = true
+}
