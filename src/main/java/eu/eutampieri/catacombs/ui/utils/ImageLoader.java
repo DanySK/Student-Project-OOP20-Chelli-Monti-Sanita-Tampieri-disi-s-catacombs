@@ -12,9 +12,6 @@ import javax.imageio.ImageIO;
 /**
  * This class loads image from a path.
  */
-
-// Suppressing SpotBugs because it finds non existing bugs, spent half an hour debugging and found none
-@SuppressFBWarnings()
 public final class ImageLoader {
 
     private ImageLoader() {
