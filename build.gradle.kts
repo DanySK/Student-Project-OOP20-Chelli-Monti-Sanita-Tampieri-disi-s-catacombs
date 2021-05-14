@@ -295,6 +295,7 @@ tasks.register("blame") {
     dependsOn(dependencies)
     val output = "${project.buildDir}${File.separator}blame.md"
     outputs.file(output)
+    outputs.upToDateWhen { false }
     doLast {
         val factory = javax.xml.parsers.DocumentBuilderFactory.newInstance();
         val xmlParser = factory.newDocumentBuilder();
@@ -306,7 +307,7 @@ tasks.register("blame") {
                 when (root.tagName) {
                     "pmd" -> PmdQAInfoExtractor(root)
                     "pmd-cpd" -> CpdQAInfoExtractor(root)
-                    "checkstyle" -> CpdQAInfoExtractor(root)
+                    "checkstyle" -> CheckstyleQAInfoExtractor(root)
                     "BugCollection" -> SpotBugsQAInfoExtractor(root)
                     else -> emptyList<QAInfo>().also { println("Unknown root type ${root.tagName}")}
                 }
